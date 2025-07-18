@@ -46,31 +46,20 @@ def video2sequence(video_path, sample_step=10):
     return imagepath_list
 
 class TestData(Dataset):
-    def __init__(self, testpath, iscrop=True, crop_size=224, scale=1.25, face_detector='fan', sample_step=10):
+    def __init__(self, testpath, face_detector, iscrop=True, crop_size=224, scale=1.25, sample_step=10):
         '''
             testpath: folder, imagepath_list, image path, video path
         '''
-        if isinstance(testpath, list):
-            self.imagepath_list = testpath
-        elif os.path.isdir(testpath): 
-            self.imagepath_list = glob(testpath + '/*.jpg') +  glob(testpath + '/*.png') + glob(testpath + '/*.bmp')
-        elif os.path.isfile(testpath) and (testpath[-3:] in ['jpg', 'png', 'bmp']):
-            self.imagepath_list = [testpath]
-        elif os.path.isfile(testpath) and (testpath[-3:] in ['mp4', 'csv', 'vid', 'ebm']):
-            self.imagepath_list = video2sequence(testpath, sample_step)
-        else:
-            print(f'please check the test path: {testpath}')
-            exit()
+        self.imagepath_list = testpath
+
         # print('total {} images'.format(len(self.imagepath_list)))
         self.imagepath_list = sorted(self.imagepath_list)
         self.crop_size = crop_size
         self.scale = scale
         self.iscrop = iscrop
         self.resolution_inp = crop_size
-        if face_detector == 'fan':
-            self.face_detector = detectors.FAN()
-        # elif face_detector == 'mtcnn':
-        #     self.face_detector = detectors.MTCNN()
+        if face_detector is not None:
+            self.face_detector = face_detector
         else:
             print(f'please check the detector: {face_detector}')
             exit()
