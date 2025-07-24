@@ -188,6 +188,7 @@ class DECA(nn.Module):
             _, _, h, w = original_image.shape
             # import ipdb; ipdb.set_trace()
             trans_verts = transform_points(trans_verts, tform, points_scale, [h, w])
+            opdict['trans_verts'] = trans_verts
             landmarks2d = transform_points(landmarks2d, tform, points_scale, [h, w])
             landmarks3d = transform_points(landmarks3d, tform, points_scale, [h, w])
             background = original_image
